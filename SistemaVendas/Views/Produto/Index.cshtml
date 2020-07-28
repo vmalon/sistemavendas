@@ -1,0 +1,46 @@
+﻿@model List<SistemaVendas.Entidades.Produto>;
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h1>Produtos</h1>
+<hr />
+
+<table class="table table-bordered">
+    <thead>
+        <tr style="background-color:#f6f6f6">
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Valor</th>
+            <th>Categoria</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr onclick=Editar(@item.Codigo)>
+                <td style="cursor:pointer">@item.Codigo</td>
+                <td style="cursor:pointer">@item.Descricao</td>
+                <td style="cursor:pointer">@item.Quantidade</td>
+                <td style="cursor:pointer">@item.Valor</td>
+                <td style="cursor:pointer">@item.Categoria.Descricao</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<div>
+    <button class="btn btn-block btn-primary" onclick="Cadastrar()">Cadastrar</button>
+</div>
+<script>
+    function Cadastrar() {
+        window.location = window.origin = "\\Produto\\Cadastro";
+    }
+
+    function Editar(codigo) {
+        window.location = window.origin = "\\Produto\\Cadastro\\" + codigo;
+    }
+
+</script>

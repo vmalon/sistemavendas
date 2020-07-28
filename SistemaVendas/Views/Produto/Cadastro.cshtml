@@ -1,0 +1,70 @@
+﻿@model SistemaVendas.Models.ProdutoViewModel;
+
+@{
+    ViewData["Title"] = "Cadastro";
+}
+@{
+    var disabled = (Model.Codigo == null) ? "disabled" : string.Empty;
+}
+
+<h1>Cadastro</h1>
+<hr />
+<form asp-controller="Produto" asp-action="Cadastro" method="post">
+    <input type="hidden" asp-for="Codigo" value="@Model.Codigo" />
+    <div class="form-group">
+        <div class="col-4">
+            <label>Descricao</label>
+            <input type="text" asp-for="Descricao" value="@Model.Descricao" class="form-control" />
+            <span asp-validation-for="Descricao" style="color:red;font-weight:bold"></span>
+        </div>
+
+        <div class="col-4">
+            <label>Quantidade</label>
+            <input type="number" asp-for="Quantidade" value="@Model.Quantidade" class="form-control" />
+            <span asp-validation-for="Quantidade" style="color:red;font-weight:bold"></span>
+        </div>
+
+
+        <div class="col-4">
+            <label>Valor</label>
+            <input type="number" asp-for="Valor" value="@Model.Valor" class="form-control" />
+            <span asp-validation-for="Valor" style="color:red;font-weight:bold"></span>
+        </div>
+
+
+        <div class="col-4">
+            <label>Categoria</label>
+            <select asp-for="CodigoCategoria" class="form-control input-group-lg" asp-items="@Model.ListaCategorias"></select>
+            <span asp-validation-for="CodigoCategoria" style="color:red;font-weight:bold"></span>
+
+        </div>
+    </div>
+    <hr />
+    <div class="col">
+        <button type="button" class="btn btn-info" onclick="Novo()">Novo</button>
+        <button type="submit" class="btn btn-success" onclick="Novo()">Gravar</button>
+        <button type="button" class="btn btn-warning" onclick="Listagem()">Listagem</button>
+        <button type="button" class="btn btn-danger" onclick="Excluir(@Model.Codigo)" @disabled>Excluir</button>
+    </div>
+</form>
+
+<script>
+    function Novo() {
+        Request("Cadastro");
+    }
+    console.log(@Model.Valor)
+    
+    console.log(parseFloat(@Model.Valor))
+    function Listagem() {
+        Request("Index");
+    }
+
+    function Excluir(codigo) {
+        Request("Excluir\\" + codigo);
+    }
+
+    function Request(request) {
+        return window.location = window.origin + "\\Produto\\" + request;
+    }
+
+</script>

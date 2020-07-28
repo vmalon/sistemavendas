@@ -1,0 +1,70 @@
+﻿@model SistemaVendas.Models.ClienteViewModel;
+
+@{
+    ViewData["Title"] = "Cadastro";
+}
+@{
+    var disabled = (Model.Codigo == null) ? "disabled" : string.Empty;
+}
+
+
+<h1>Cadastro</h1>
+<hr />
+
+<form asp-controller="Cliente" asp-action="Cadastro" method="post">
+    <input type="hidden" asp-for="Codigo" value="@Model.Codigo" />
+    <div class="form-group">
+        <div class="col-4">
+            <label>Nome</label>
+            <input type="text" asp-for="Nome" value="@Model.Nome" class="form-control" />
+            <span asp-validation-for="Nome" style="color:red;font-weight:bold"></span>
+        </div>
+
+        <div class="col-4">
+            <label>CNPJ / CPF</label>
+            <input type="text" asp-for="CNPJ_CPF" value="@Model.CNPJ_CPF" class="form-control" />
+            <span asp-validation-for="CNPJ_CPF" style="color:red;font-weight:bold"></span>
+        </div>
+
+
+        <div class="col-4">
+            <label>Email</label>
+            <input type="text" asp-for="Email" value="@Model.Email" class="form-control" />
+            <span asp-validation-for="Email" style="color:red;font-weight:bold"></span>
+        </div>
+
+
+        <div class="col-4">
+            <label>Celular</label>
+            <input type="text" asp-for="Celular" value="@Model.Celular" class="form-control" />
+            <span asp-validation-for="Celular" style="color:red;font-weight:bold"></span>
+
+        </div>
+    </div>
+    <hr />
+    <div class="col">
+        <button type="button" class="btn btn-info" onclick="Novo()">Novo</button>
+        <button type="submit" class="btn btn-success" onclick="Novo()">Gravar</button>
+        <button type="button" class="btn btn-warning" onclick="Listagem()">Listagem</button>
+        <button type="button" class="btn btn-danger" onclick="Excluir(@Model.Codigo)" @disabled>Excluir</button>
+    </div>
+</form>
+
+<script>
+    function Novo() {
+        Request("Cadastro");
+    }
+
+    function Listagem() {
+        Request("Index");
+    }
+
+    function Excluir(codigo) {
+        Request("Excluir\\" + codigo);
+    }
+
+    function Request(request) {
+        return window.location = window.origin + "\\Cliente\\" + request;
+    }
+
+</script>
