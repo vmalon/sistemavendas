@@ -27,7 +27,7 @@
 
         <div class="col-4">
             <label>Valor</label>
-            <input type="number" asp-for="Valor" value="@Model.Valor" class="form-control" />
+            <input type="text" asp-for="Valor" value="@Model.Valor" class="form-control" />
             <span asp-validation-for="Valor" style="color:red;font-weight:bold"></span>
         </div>
 
@@ -52,9 +52,7 @@
     function Novo() {
         Request("Cadastro");
     }
-    console.log(@Model.Valor)
-    
-    console.log(parseFloat(@Model.Valor))
+
     function Listagem() {
         Request("Index");
     }

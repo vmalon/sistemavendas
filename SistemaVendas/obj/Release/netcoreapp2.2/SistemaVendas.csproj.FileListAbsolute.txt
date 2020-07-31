@@ -38,3 +38,4 @@ C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\R
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Release\netcoreapp2.2\SistemaVendas.dll
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Release\netcoreapp2.2\SistemaVendas.pdb
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Release\netcoreapp2.2\SistemaVendas.csproj.CopyComplete
+C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Release\netcoreapp2.2\SistemaVendas.csprojAssemblyReference.cache

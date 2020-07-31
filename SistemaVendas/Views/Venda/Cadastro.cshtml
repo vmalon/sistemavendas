@@ -1,4 +1,4 @@
-﻿@model SistemaVendas.Models.ProdutoViewModel;
+﻿@model SistemaVendas.Models.VendaViewModel;
 
 @{
     ViewData["Title"] = "Venda";
@@ -14,47 +14,139 @@
     <div class="form-group">
         <div class="col-4">
             <label>Descricao</label>
-            <input type="text" asp-for="Descricao" value="@Model.Descricao" class="form-control" />
-            <span asp-validation-for="Descricao" style="color:red;font-weight:bold"></span>
+            <input type="date" asp-for="Data" value="@Model.Data" class="form-control" />
+            <span asp-validation-for="Data" style="color:red;font-weight:bold"></span>
         </div>
 
         <div class="col-4">
+            <label>Cliente</label>
+            <select asp-for="CodigoCliente" asp-items="@Model.ListaClientes" class="form-control " input-lg></select>
+            <span asp-validation-for="CodigoCliente" style="color:red;font-weight:bold"></span>
+        </div>
+        <div class="col-4">
+            <label>Produtos</label>
+            <select id="cboProduto" onchange="BuscarPrecoProduto()" asp-items="@Model.ListaProdutos" class="form-control" input-lg></select>
+        </div>
+        <div class="col-2">
+            <label>Preço unitário</label>
+            <input id="txtPrecoUnitario" type="number" class="form-control" disabled />
+        </div>
+        <div class="col-2">
             <label>Quantidade</label>
-            <input type="number" asp-for="Quantidade" value="@Model.Quantidade" class="form-control" />
-            <span asp-validation-for="Quantidade" style="color:red;font-weight:bold"></span>
+            <input id="txtQuantidade" type="number" onchange="CalculaSubTotal()" class="form-control" min="1" />
         </div>
-
-
-        <div class="col-4">
-            <label>Valor</label>
-            <input type="number" asp-for="Valor" value="@Model.Valor" class="form-control" />
-            <span asp-validation-for="Valor" style="color:red;font-weight:bold"></span>
+        <div class="col-2">
+            <label>Sub-Total</label>
+            <input id="txtSubTotal" type="number" class="form-control" disabled />
         </div>
-
-
-        <div class="col-4">
-            <label>Categoria</label>
-            <select asp-for="CodigoCategoria" class="form-control input-group-lg" asp-items="@Model.ListaCategorias"></select>
-            <span asp-validation-for="CodigoCategoria" style="color:red;font-weight:bold"></span>
-
+        <br />
+        <div class="col-2">
+            <button type="button" class="btn btn-info" onclick="AdicionaProduto()">Adicionar</button>
         </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="background-color:#f6f6f6">
+                        <th>Produto</th>
+                        <th>Preço Unitário</th>
+                        <th>Qtd.</th>
+                        <th>Valor Total</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="gridProdutos"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label style="font-weight:bold">Total</label>
+        <input id="txtTotal" type="number" asp-for="Total" class="form-control" readonly />
+        <span asp-validation-for="Total" class="text-danger"></span>
     </div>
     <hr />
     <div class="col">
         <button type="button" class="btn btn-info" onclick="Novo()">Novo</button>
-        <button type="submit" class="btn btn-success" onclick="Novo()">Gravar</button>
+        <button type="submit" class="btn btn-success">Gravar</button>
         <button type="button" class="btn btn-warning" onclick="Listagem()">Listagem</button>
         <button type="button" class="btn btn-danger" onclick="Excluir(@Model.Codigo)" @disabled>Excluir</button>
     </div>
+    <textarea asp-for="JsonProdutos" id="txtJsonProdutos" class="col" style="display:none"></textarea>
 </form>
 
 <script>
+    const produto = document.getElementById('cboProduto');
+    const txtJsonProdutos = document.getElementById('txtJsonProdutos');
+    const inputValorProduto = document.getElementById('txtPrecoUnitario');
+    const inputQuantidade = document.getElementById('txtQuantidade');
+    const inputSubTotal = document.getElementById('txtSubTotal');
+    const inputTotal = document.getElementById('txtTotal');
+    const gridProdutos = document.getElementById('gridProdutos');
+
+    const formatter = Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+
+
+    const Items = new Object();
+    Items.Produto = new Array();
+
+    function AdicionaProduto() {
+        Items.Produto.push({
+            "CodigoProduto": produto.value,
+            "Quantidade": inputQuantidade.value,
+            "ValorTotal": inputSubTotal.value,
+            "ValorUnitario": inputSubTotal.value
+        });
+
+        var linhaGrid = `<tr id=${produto.value}>
+                              <td>${produto.options[produto.selectedIndex].text}</td>
+                              <td>${formatNumber(inputValorProduto.value)}</td>
+                              <td>${inputQuantidade.value}</td>
+                              <td>${formatNumber(inputSubTotal.value)}</td>
+                              <td><button type="button" class="btn btn-danger" onclick="ExcluirLinha()">Excluir</button></td>
+                        </tr>`;
+
+        var valorTotal = Number(inputSubTotal.value) + Number(inputTotal.value);
+
+        inputTotal.value = valorTotal;
+        txtJsonProdutos.value = JSON.stringify(Items.Produto);
+        gridProdutos.innerHTML += linhaGrid;
+    }
+
+    function ExcluirLinha(codigoProduto) {
+        var index = Items.Produto.findIndex(x => x.CodigoProduto == codigoProduto)
+    };
+
+    function formatNumber(value) {
+        return formatter.format(Math.round(value));
+    }
+
+    function BuscarPrecoProduto() {
+        var url = `/BuscaPrecoProduto/${produto.value}`;
+        var xhr = new XMLHttpRequest();
+
+        //Quando estado estiver Ok
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                inputValorProduto.value = xhr.responseText;
+            }
+        };
+        xhr.open('GET', url, false);
+        xhr.send();
+    }
+
+    function CalculaSubTotal() {
+        var subTotal = inputQuantidade.value * inputValorProduto.value;
+        inputSubTotal.value = subTotal;
+    }
+
     function Novo() {
         Request("Cadastro");
     }
-    console.log(@Model.Valor)
 
-    console.log(parseFloat(@Model.Valor))
     function Listagem() {
         Request("Index");
     }
@@ -64,7 +156,7 @@
     }
 
     function Request(request) {
-        return window.location = window.origin + "\\Produto\\" + request;
+        return window.location = window.origin + "\\Venda\\" + request;
     }
 
 </script>
