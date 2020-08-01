@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace SistemaVendas.Models
 {
-    public class Grafico
+    public class GraficoViewModel
     {
         public int CodigoProduto { get; set; }
 
         public string Descricao { get; set; }
 
-        public double Quantidade { get; set; }
+        public double QuantidadeTotal { get; set; }
 
     }
 }
