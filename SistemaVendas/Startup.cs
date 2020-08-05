@@ -35,10 +35,11 @@ namespace SistemaVendas
 
             //Especificar o provider e a string de conexão
             services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlServer("Server=.;Database=Estoque;Trusted_Connection=true;MultipleActiveResultSets=true"));
+            options.UseSqlServer(Configuration.GetConnectionString("BancoEstoque")));
 
             //Configurações de sessão para o .NET Core
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSession();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -60,12 +61,14 @@ namespace SistemaVendas
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
+
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

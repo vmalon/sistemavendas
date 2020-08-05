@@ -5,7 +5,6 @@ C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\bin\D
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\bin\Debug\netcoreapp2.2\SistemaVendas.pdb
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\bin\Debug\netcoreapp2.2\SistemaVendas.Views.dll
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\bin\Debug\netcoreapp2.2\SistemaVendas.Views.pdb
-C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.csprojAssemblyReference.cache
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.csproj.CoreCompileInputs.cache
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.RazorAssemblyInfo.cache
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.RazorAssemblyInfo.cs
@@ -22,6 +21,7 @@ C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\D
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Configuracao\Index.g.cshtml.cs
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Home\Index.g.cshtml.cs
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Home\Privacy.g.cshtml.cs
+C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Login\Index.g.cshtml.cs
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Produto\Cadastro.g.cshtml.cs
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Produto\Index.g.cshtml.cs
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Relatorio\Grafico.g.cshtml.cs
@@ -39,3 +39,6 @@ C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\D
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.dll
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.pdb
 C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.csproj.CopyComplete
+C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\SistemaVendas.csprojAssemblyReference.cache
+C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Error\Index.g.cshtml.cs
+C:\Users\Vinícius\Desktop\Udemy\Curso Web MVC\SistemaVendas\SistemaVendas\obj\Debug\netcoreapp2.2\Razor\Views\Cadastro\Cadastro.g.cshtml.cs

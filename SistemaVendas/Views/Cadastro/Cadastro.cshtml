@@ -1,0 +1,57 @@
+﻿@model SistemaVendas.Models.UsuarioViewModel;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Cadastro</title>
+</head>
+<body>
+    <form asp-controller="Cadastro" asp-action="Cadastro" method="post">
+        <div class="container" style="width:auto">
+            <div class="row justify-content-center">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="card-header">Cadastro</div>
+                        <div class="col-4">
+                            <label>Nome</label>
+                            <input type="text" asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" style="color:red;font-weight:bold"></span>
+                        </div>
+                        <div class="col-4">
+                            <label>Email</label>
+                            <input type="email" asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" style="color:red;font-weight:bold"></span>
+                        </div>
+                        <div class="col-4">
+                            <label>Senha</label>
+                            <input type="password" asp-for="Senha" class="form-control" />
+                            <span asp-validation-for="Senha" style="color:red;font-weight:bold"></span>
+                        </div>
+                        <hr />
+                        <div class="col">
+                            <button type="submit" onClick="Request('Cadastro')" class="btn btn-success">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<script>
+
+    function Request(request) {
+        return window.location = `${window.orign}\\Cadastro\\${request}` 
+    }
+
+
+</script>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>

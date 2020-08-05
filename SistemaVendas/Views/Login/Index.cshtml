@@ -1,0 +1,46 @@
+﻿@model LoginViewModel
+
+@{ 
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/Login.css" rel="stylesheet" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="~/Img/logo.png" id="icon" alt="User Icon" style="margin-top:20px;margin-bottom:20px" />
+            </div>
+            <!-- Login Form -->
+            <form asp-controller="Login" asp-action="Index" method="post">
+                <div>
+                    <input asp-for="Email" type="text" class="fadeIn second" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger" style="font-weight:bold;color:red"></span>
+                    <input asp-for="Senha" type="password" class="fadeIn third" placeholder="Senha">
+                    <span asp-validation-for="Senha" class="text-danger" style="font-weight:bold;color:red"></span>
+                </div>
+                <input type="submit" class="fadeIn fourth" value="Log In">
+                <br />
+                <span style="font-weight:bold;color:red">@ViewData["ErroLogin"]</span>
+            </form>
+            <!-- Remind Passowrd -->
+            <div id="formFooter">
+                <a class="underlineHover" href="#">Esqueceu a senha?</a>
+                <br />
+                <a class="underlineHover" href="~/Cadastro/Cadastro">Cadastro</a>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

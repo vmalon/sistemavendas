@@ -1,7 +1,16 @@
-﻿
+﻿@model SistemaVendas.Entidades.Usuario
+
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Dados do acesso</h1>
 
+<div class="container">
+    <div class="form-group col-4">
+        <label>Nome</label>
+        <input class="form-control" type="text" readonly value="@Model.Nome" />
+        <label>E-mail</label>
+        <input class="form-control" type="text" readonly value="@Model.Email" />
+    </div>
+</div>
