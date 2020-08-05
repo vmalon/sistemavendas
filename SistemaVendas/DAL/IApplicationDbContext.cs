@@ -7,5 +7,6 @@ namespace SistemaVendas.DAL
 {
     interface IApplicationDbContext
     {
+        int MyProperty { get; set; }
     }
 }
