@@ -12951,9 +12951,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Vinícius\\Desktop\\Udemy\\Curso Web MVC\\SistemaVendas\\SistemaVendas\\SistemaVendas.csproj",
-      "projectName": "SistemaVendas",
-      "projectPath": "C:\\Users\\Vinícius\\Desktop\\Udemy\\Curso Web MVC\\SistemaVendas\\SistemaVendas\\SistemaVendas.csproj",
+      "projectUniqueName": "C:\\Users\\Vinícius\\Desktop\\Udemy\\Curso Web MVC\\SistemaVendas\\SistemaVendas\\Aplicacao.csproj",
+      "projectName": "Aplicacao",
+      "projectPath": "C:\\Users\\Vinícius\\Desktop\\Udemy\\Curso Web MVC\\SistemaVendas\\SistemaVendas\\Aplicacao.csproj",
       "packagesPath": "C:\\Users\\Vinícius\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Vinícius\\Desktop\\Udemy\\Curso Web MVC\\SistemaVendas\\SistemaVendas\\obj\\",
       "projectStyle": "PackageReference",
