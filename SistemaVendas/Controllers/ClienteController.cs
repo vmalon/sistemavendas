@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SistemaVendas.DAL;
-using SistemaVendas.Entidades;
+using SistemaVendas.Dominio.Entidades;
 using SistemaVendas.Models;
 
 namespace SistemaVendas.Controllers

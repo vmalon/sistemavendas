@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SistemaVendas.DAL;
-using SistemaVendas.Entidades;
+using SistemaVendas.Dominio.Entidades;
 using SistemaVendas.Models;
 
 namespace SistemaVendas.Controllers
@@ -23,10 +23,20 @@ namespace SistemaVendas.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Venda> listaVendas = mContext.Venda.ToList();
-
-            ListaClientes();
-            ListaProdutos();
+            IEnumerable<Venda> listaVendas = (from v in mContext.Venda
+                                              join c in mContext.Cliente
+                                              on v.CodigoCliente equals c.Codigo
+                                              select new Venda
+                                              {
+                                                  Codigo = v.Codigo,
+                                                  CodigoCliente = v.CodigoCliente,
+                                                  Data = v.Data,
+                                                  Total = v.Total,
+                                                  Cliente = new Cliente
+                                                  {
+                                                      Nome = c.Nome
+                                                  }
+                                              }).OrderByDescending(x => x.Total).ToList();
 
             return View(listaVendas);
         }
@@ -84,11 +94,14 @@ namespace SistemaVendas.Controllers
 
             if (id != null)
             {
-                var entidade = mContext.Venda.Where(x => x.Codigo == id).FirstOrDefault();
-                viewModel.Codigo = entidade.Codigo;
-                viewModel.Data = entidade.Data;
-                viewModel.Total = entidade.Total;
-                viewModel.CodigoCliente = entidade.CodigoCliente;
+                var venda = mContext.Venda.Where(x => x.Codigo == id).Include(z => z.Produtos).FirstOrDefault();
+
+                viewModel.Codigo = venda.Codigo;
+                viewModel.Data = venda.Data;
+                viewModel.Total = venda.Total;
+                viewModel.CodigoCliente = venda.CodigoCliente;
+                viewModel.Produtos = venda.Produtos;
+              
             }
 
             return View(viewModel);

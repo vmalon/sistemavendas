@@ -1,44 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Aplicacao.Servico;
 using Microsoft.AspNetCore.Mvc;
 using SistemaVendas.DAL;
-using SistemaVendas.Entidades;
+using SistemaVendas.Dominio.Entidades;
 using SistemaVendas.Models;
 
 namespace SistemaVendas.Controllers
 {
     public class CategoriaController : Controller
     {
-        protected ApplicationDbContext mContext;
+        private readonly IServicoAplicacaoCategoria ServicoAplicacaoCategoria;
 
-        public CategoriaController(ApplicationDbContext context)
+        public CategoriaController(IServicoAplicacaoCategoria servicoAplicacaoCategoria)
         {
-            mContext = context;
+            ServicoAplicacaoCategoria = servicoAplicacaoCategoria;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Categoria> lista = mContext.Categoria.ToList();
-            //Libera a memória do acesso ao Entity
-            mContext.Dispose();
-            return View(lista);
+            return View(ServicoAplicacaoCategoria.ListarCategorias());
         }
 
         [HttpGet]
         public IActionResult Cadastro(int? id)
         {
-            CategoriaViewModel viewModel = new CategoriaViewModel();
-
+            CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel();
             if (id != null)
             {
-                var entidade = mContext.Categoria.Where(x => x.Codigo == id).FirstOrDefault();
-                viewModel.Codigo = entidade.Codigo;
-                viewModel.Descricao = entidade.Descricao;
+                objCategoriaViewModel = ServicoAplicacaoCategoria.BuscarCategoria((int)id);
             }
 
-            return View(viewModel);
+            return View(objCategoriaViewModel);
         }
 
         [HttpPost]
@@ -48,23 +42,7 @@ namespace SistemaVendas.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Categoria objCategoria = new Categoria()
-                    {
-                        Codigo = (categoria.Codigo != null) ? categoria.Codigo : null,
-                        Descricao = categoria.Descricao
-                    };
-
-                    if (categoria.Codigo != null)
-                    {
-                        mContext.Entry(objCategoria).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    }
-                    else
-                    {
-                        mContext.Add(objCategoria);
-                    }
-
-                    mContext.SaveChanges();
-                    mContext.Dispose();
+                    ServicoAplicacaoCategoria.CadastrarCategoria(categoria);
                     return RedirectToAction("Index");
                 }
                 else
@@ -74,7 +52,6 @@ namespace SistemaVendas.Controllers
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
@@ -84,11 +61,7 @@ namespace SistemaVendas.Controllers
         {
             try
             {
-                Categoria categoria = mContext.Categoria.Where(x => x.Codigo == id).FirstOrDefault();
-                mContext.Attach(categoria);
-                mContext.Remove(categoria);
-                mContext.SaveChanges();
-                mContext.Dispose();
+                ServicoAplicacaoCategoria.ExcluirCategoria(id);
 
                 return RedirectToAction("Index");
             }

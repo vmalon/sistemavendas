@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SistemaVendas.DAL;
-using SistemaVendas.Entidades;
+using SistemaVendas.Dominio.Entidades;
 using SistemaVendas.Helpers;
 
 namespace SistemaVendas.Controllers

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SistemaVendas.Dominio.Entidades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace SistemaVendas.Models
         public int? Codigo { get; set; }
 
         [Required(ErrorMessage = "Informe a Data da Venda")]
-        public DateTime? Data{ get; set; }
+        public DateTime Data { get; set; }
 
         public decimal Total { get; set; }
 
@@ -22,6 +23,8 @@ namespace SistemaVendas.Models
         public IEnumerable<SelectListItem> ListaProdutos { get; set; }
 
         public IEnumerable<SelectListItem> ListaClientes { get; set; }
+
+        public ICollection<VendaProdutos> Produtos { get; set; }
 
         public string JsonProdutos { get; set; }
     }

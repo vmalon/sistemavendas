@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Dominio.Entidades;
+using SistemaVendas.Dominio.Entidades;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SistemaVendas.Entidades
+namespace SistemaVendas.Dominio.Entidades
 {
-    public class Produto
+    public class Produto : EntityBase
     {
-        [Key]
-        public int? Codigo { get; set; }
         public string Descricao { get; set; }
         public double Quantidade { get; set; }
         public decimal Valor { get; set; }

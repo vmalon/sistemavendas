@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SistemaVendas.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SistemaVendas.Dominio.Entidades;
+
 
 namespace SistemaVendas.DAL
 {

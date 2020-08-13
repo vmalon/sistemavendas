@@ -1,10 +1,10 @@
-﻿@model List<SistemaVendas.Entidades.Venda>;
+﻿@model List<SistemaVendas.Dominio.Entidades.Venda>;
 
 @{
     ViewData["Title"] = "Vendas";
 }
 
-<h2>Vendas</h2>
+<h2>Vendas Realizadas</h2>
 <hr />
 
 <table class="table table-bordered">
@@ -13,17 +13,17 @@
             <th>Código</th>
             <th>Data</th>
             <th>Cliente</th>
-            <th>Total</th>
+            <th>Total da Venda</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr onclick=Editar(@item.Codigo)>
-                <td style="cursor:pointer">@item.Codigo</td>
-                <td style="cursor:pointer">@item.Data</td>
-                <td style="cursor:pointer">@item.CodigoCliente</td>
-                <td style="cursor:pointer">@item.Total</td>
+                <td style="cursor:pointer;font-weight:bold">@item.Codigo</td>
+                <td style="cursor:pointer;font-weight:bold">@item.Data.ToString("dd/MM/yyyy")</td>
+                <td style="cursor:pointer;font-weight:bold">@item.Cliente.Nome</td>
+                <td style="cursor:pointer;font-weight:bold">@item.Total</td>
             </tr>
         }
     </tbody>

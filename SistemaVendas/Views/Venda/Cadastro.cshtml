@@ -13,8 +13,8 @@
     <input type="hidden" asp-for="Codigo" value="@Model.Codigo" />
     <div class="form-group">
         <div class="col-4">
-            <label>Descricao</label>
-            <input type="date" asp-for="Data" value="@Model.Data" class="form-control" />
+            <label>Data da Venda</label>
+            <input type="date" asp-for="Data" value="@Model.Data.ToString("yyyy-MM-dd")" class="form-control" />
             <span asp-validation-for="Data" style="color:red;font-weight:bold"></span>
         </div>
 
@@ -56,7 +56,26 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody id="gridProdutos"></tbody>
+                <tbody id="gridProdutos">
+                    @{
+                        if (Model.Produtos != null)
+                        {
+
+                            foreach (var item in Model.Produtos)
+                            {
+                                <tr>
+                                    <td>@item.Produto.Descricao</td>
+                                    <td>@item.Produto.Valor</td>
+                                    <td>@item.Produto.Quantidade</td>
+                                    <td>@item.ValorTotal</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="ExcluirLinha()">Excluir</button></td>
+                                </tr>
+                            }
+                        }
+
+                    }
+
+                </tbody>
             </table>
         </div>
     </div>
@@ -94,6 +113,11 @@
     Items.Produto = new Array();
 
     function AdicionaProduto() {
+        if (inputQuantidade.value <= 0) {
+            alert('Valor da quantidade não pode ser 0');
+            return;
+        }
+
         Items.Produto.push({
             "CodigoProduto": produto.value,
             "Quantidade": inputQuantidade.value,
@@ -111,7 +135,9 @@
 
         var valorTotal = Number(inputSubTotal.value) + Number(inputTotal.value);
 
+
         inputTotal.value = valorTotal;
+        inputQuantidade.value = 0;
         txtJsonProdutos.value = JSON.stringify(Items.Produto);
         gridProdutos.innerHTML += linhaGrid;
     }

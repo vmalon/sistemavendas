@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Aplicacao.Servico;
+using Dominio.Interfaces;
+using Dominio.Repositorio;
+using Dominio.Servicos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repositorio.Entidades;
 using SistemaVendas.DAL;
 
 namespace SistemaVendas
@@ -34,12 +34,23 @@ namespace SistemaVendas
             });
 
             //Especificar o provider e a string de conexão
-            services.AddDbContext<ApplicationDbContext>(options => 
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("BancoEstoque")));
+
+
+            services.AddDbContext<Repositorio.Contexto.ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BancoEstoque")));
 
             //Configurações de sessão para o .NET Core
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
+
+            //Serviços com o dominio e aplicação
+            services.AddScoped<IServicoAplicacaoCategoria, ServicoAplicacaoCategoria>();
+            services.AddScoped<IServicoCategoria, ServicoCategoria>();
+
+            //Dominio com o repositorio
+            services.AddScoped<IRepositorioCategoria, RepositorioCategoria>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

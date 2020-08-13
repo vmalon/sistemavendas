@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Dominio.Entidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SistemaVendas.Entidades
+namespace SistemaVendas.Dominio.Entidades
 {
-    public class Venda
+    public class Venda : EntityBase
     {
-        [Key]
-        public int? Codigo { get; set; }
+        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
         public DateTime Data { get; set; }
         public decimal Total { get; set; }
         [ForeignKey("Cliente")]
