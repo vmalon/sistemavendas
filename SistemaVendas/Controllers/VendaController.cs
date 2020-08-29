@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Aplicacao.Servico.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,139 +15,69 @@ namespace SistemaVendas.Controllers
 {
     public class VendaController : Controller
     {
-        private ApplicationDbContext mContext;
+        private readonly IServicoAplicacaoVenda ServicoAplicacaoVenda;
 
-        public VendaController(ApplicationDbContext dbContext)
+        public VendaController(IServicoAplicacaoVenda servicoAplicacaoVenda)
         {
-            mContext = dbContext;
+            ServicoAplicacaoVenda = servicoAplicacaoVenda;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Venda> listaVendas = (from v in mContext.Venda
-                                              join c in mContext.Cliente
-                                              on v.CodigoCliente equals c.Codigo
-                                              select new Venda
-                                              {
-                                                  Codigo = v.Codigo,
-                                                  CodigoCliente = v.CodigoCliente,
-                                                  Data = v.Data,
-                                                  Total = v.Total,
-                                                  Cliente = new Cliente
-                                                  {
-                                                      Nome = c.Nome
-                                                  }
-                                              }).OrderByDescending(x => x.Total).ToList();
+            //IEnumerable<Venda> listaVendas = (from v in mContext.Venda
+            //                                  join c in mContext.Cliente
+            //                                  on v.CodigoCliente equals c.Codigo
+            //                                  select new Venda
+            //                                  {
+            //                                      Codigo = v.Codigo,
+            //                                      CodigoCliente = v.CodigoCliente,
+            //                                      Data = v.Data,
+            //                                      Total = v.Total,
+            //                                      Cliente = new Cliente
+            //                                      {
+            //                                          Nome = c.Nome
+            //                                      }
+            //                                  }).OrderByDescending(x => x.Total).ToList();
 
-            return View(listaVendas);
-        }
-
-        private IEnumerable<SelectListItem> ListaClientes()
-        {
-            List<SelectListItem> listaClientes = new List<SelectListItem>();
-
-            listaClientes.Add(new SelectListItem
-            {
-                Value = string.Empty,
-                Text = "Selecione"
-            });
-
-            foreach (var item in mContext.Cliente.ToList())
-            {
-                listaClientes.Add(new SelectListItem
-                {
-                    Value = item.Codigo.ToString(),
-                    Text = item.Nome
-                });
-            }
-
-            return listaClientes;
-        }
-
-        public IEnumerable<SelectListItem> ListaProdutos()
-        {
-            List<SelectListItem> listaProdutos = new List<SelectListItem>();
-
-            listaProdutos.Add(new SelectListItem
-            {
-                Value = string.Empty,
-                Text = "Selecione"
-            });
-
-            foreach (var item in mContext.Produto.ToList())
-            {
-                listaProdutos.Add(new SelectListItem
-                {
-                    Value = item.Codigo.ToString(),
-                    Text = item.Descricao
-                });
-            }
-
-            return listaProdutos;
+            return View(ServicoAplicacaoVenda.ListarVendas());
         }
 
         [HttpGet]
         public IActionResult Cadastro(int? id)
         {
             VendaViewModel viewModel = new VendaViewModel();
-            viewModel.ListaClientes = ListaClientes();
-            viewModel.ListaProdutos = ListaProdutos();
+            viewModel.ListaClientes = ServicoAplicacaoVenda.ListarClientes();
+            viewModel.ListaProdutos = ServicoAplicacaoVenda.ListarProdutos();
+            var dataAtual = DateTime.Now.ToString("dd/MM/yyyy");
+            viewModel.Data = Convert.ToDateTime(dataAtual);
 
             if (id != null)
             {
-                var venda = mContext.Venda.Where(x => x.Codigo == id).Include(z => z.Produtos).FirstOrDefault();
-
-                viewModel.Codigo = venda.Codigo;
-                viewModel.Data = venda.Data;
-                viewModel.Total = venda.Total;
-                viewModel.CodigoCliente = venda.CodigoCliente;
-                viewModel.Produtos = venda.Produtos;
-              
+                viewModel = ServicoAplicacaoVenda.BuscarVenda((int)id);
             }
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Cadastro(VendaViewModel venda)
+        public IActionResult Cadastro(VendaViewModel vendaViewModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Venda objVenda = new Venda()
-                    {
-                        Codigo = (venda.Codigo != null) ? venda.Codigo : null,
-                        Data = (DateTime)venda.Data,
-                        Total = venda.Total,
-                        CodigoCliente = (int)venda.CodigoCliente,
-                        Produtos = JsonConvert.DeserializeObject<ICollection<VendaProdutos>>(venda.JsonProdutos)
-                    };
-
-
-                    if (venda.Codigo != null)
-                    {
-                        mContext.Entry(objVenda).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        mContext.Add(objVenda);
-                    }
-
-                    mContext.SaveChanges();
-                    mContext.Dispose();
+                    ServicoAplicacaoVenda.CadastrarVenda(vendaViewModel);
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    venda.ListaClientes = ListaClientes();
-                    venda.ListaProdutos = ListaProdutos();
-                    return View(venda);
+                    vendaViewModel.ListaClientes = ServicoAplicacaoVenda.ListarClientes();
+                    vendaViewModel.ListaProdutos = ServicoAplicacaoVenda.ListarProdutos();
+                    return View(vendaViewModel);
                 }
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
@@ -156,12 +87,7 @@ namespace SistemaVendas.Controllers
         {
             try
             {
-                Venda venda = mContext.Venda.Where(x => x.Codigo == id).FirstOrDefault();
-                mContext.Attach(venda);
-                mContext.Remove(venda);
-                mContext.SaveChanges();
-                mContext.Dispose();
-
+                ServicoAplicacaoVenda.ExcluirVenda(id);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -175,7 +101,7 @@ namespace SistemaVendas.Controllers
         {
             try
             {
-                return mContext.Produto.Where(x => x.Codigo == codigoProduto).Select(x => x.Valor).FirstOrDefault();
+                return ServicoAplicacaoVenda.BuscaPrecoProduto(codigoProduto);
             }
             catch (Exception ex)
             {
@@ -183,6 +109,4 @@ namespace SistemaVendas.Controllers
             }
         }
     }
-
-
 }

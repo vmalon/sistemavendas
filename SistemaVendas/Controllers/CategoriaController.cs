@@ -24,7 +24,7 @@ namespace SistemaVendas.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cadastro(int? id)
+        public IActionResult BuscaRegistro(int? id)
         {
             CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel();
             if (id != null)

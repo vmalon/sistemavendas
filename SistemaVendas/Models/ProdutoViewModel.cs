@@ -15,10 +15,11 @@ namespace SistemaVendas.Models
         [Required(ErrorMessage = "Informe a quantidade em estoque do produto")]
         public double Quantidade { get; set; }
         [Required(ErrorMessage = "Informe o valor do produto")]
-        [Range(0.1,Double.PositiveInfinity)]
+        [Range(0.1, Double.PositiveInfinity)]
         public decimal? Valor { get; set; }
         [Required(ErrorMessage = "Informe a categoria do produto")]
         public int? CodigoCategoria { get; set; }
         public IEnumerable<SelectListItem> ListaCategorias { get; set; }
+        public string DescricaoCategoria { get; set; }
     }
 }

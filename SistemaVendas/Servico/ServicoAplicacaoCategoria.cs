@@ -10,7 +10,7 @@ namespace Aplicacao.Servico
     {
         private readonly IServicoCategoria ServicoCategoria;
 
-        public ServicoAplicacaoCategoria(IServicoCategoria servicoCategoria)
+        public ServicoAplicacaoCategoria(IServicoCategoria servicoCategoria)    
         {
             ServicoCategoria = servicoCategoria;
         }
@@ -18,7 +18,7 @@ namespace Aplicacao.Servico
 
         public IEnumerable<CategoriaViewModel> ListarCategorias()
         {
-            var listaCategorias = ServicoCategoria.ListarCategorias();
+            var listaCategorias = ServicoCategoria.ListarRegistros();
 
             List<CategoriaViewModel> listaCategoriaViewModel = new List<CategoriaViewModel>();
 
@@ -38,7 +38,7 @@ namespace Aplicacao.Servico
 
         public CategoriaViewModel BuscarCategoria(int id)
         {
-            var registro = ServicoCategoria.BuscarCategoria(id);
+            var registro = ServicoCategoria.BuscarRegistro(id);
 
             CategoriaViewModel objCategoriaViewModel = new CategoriaViewModel()
             {
@@ -62,7 +62,7 @@ namespace Aplicacao.Servico
 
         public void ExcluirCategoria(int id)
         {
-            ServicoCategoria.ExcluirCategoria(id);
+            ServicoCategoria.ExcluirRegistro(id);
         }
 
     }

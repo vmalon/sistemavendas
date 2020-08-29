@@ -9,6 +9,5 @@ namespace Repositorio.Entidades
     public class RepositorioCategoria : RepositorioGenerico<Categoria>, IRepositorioCategoria
     {
         public RepositorioCategoria(ApplicationDbContext dbContext) : base(dbContext) { }
-
     }
 }

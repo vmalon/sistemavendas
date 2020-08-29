@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Aplicacao.Servico.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using SistemaVendas.DAL;
 using SistemaVendas.Models;
@@ -12,31 +13,28 @@ namespace SistemaVendas.Controllers
     {
         private string labels;
         private string valores;
-        private string cores    ;
+        private string cores;
 
-        private ApplicationDbContext mContext;
+        IServicoAplicacaoVendaProdutos ServicoAplicacaoVendaProdutos;
 
-        public RelatorioController(ApplicationDbContext _context)
+        public RelatorioController(IServicoAplicacaoVendaProdutos servicoAplicacaoVendaProdutos)
         {
-            mContext = _context;
+            ServicoAplicacaoVendaProdutos = servicoAplicacaoVendaProdutos;
         }
 
         public IActionResult Grafico()
         {
-
             try
             {
-                var lista = mContext.VendaProdutos
+                var random = new Random();
+                var lista = ServicoAplicacaoVendaProdutos.ListaProdutosGrafico()
                     .GroupBy(x => x.CodigoProduto)
-                        .Select(y => new GraficoViewModel
+                        .Select(y => new GraficoViewModel()
                         {
                             CodigoProduto = y.First().CodigoProduto,
-                            Descricao = y.First().Produto.Descricao,
-                            QuantidadeTotal = y.Sum(z => z.Quantidade)
+                            Descricao = y.First().Descricao,
+                            QuantidadeTotal = y.Sum(z => z.QuantidadeTotal)
                         }).ToList();
-
-
-                var random = new Random();
 
                 foreach (var item in lista)
                 {
@@ -49,16 +47,11 @@ namespace SistemaVendas.Controllers
                 ViewBag.Valores = valores;
                 ViewBag.Cores = cores;
 
-
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
-
-
-
 
             return View();
         }

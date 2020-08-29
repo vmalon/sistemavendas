@@ -1,7 +1,5 @@
 ﻿using Dominio.Entidades;
-using SistemaVendas.Dominio.Entidades;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace SistemaVendas.Dominio.Entidades
 {

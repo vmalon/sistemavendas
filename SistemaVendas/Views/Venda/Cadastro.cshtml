@@ -2,25 +2,28 @@
 
 @{
     ViewData["Title"] = "Venda";
-}
-@{
     var disabled = (Model.Codigo == null) ? "disabled" : string.Empty;
+    var titulo = (Model.Codigo != null) ? $"Venda Nº{Model.Codigo}" : "Cadastro";
+
 }
 
-<h1>Cadastro</h1>
+<h1>@titulo</h1>
 <hr />
-<form asp-controller="Venda" asp-action="Cadastro" method="post">
+<form asp-controller="Venda" asp-action="Cadastro" method="post" id="target">
     <input type="hidden" asp-for="Codigo" value="@Model.Codigo" />
     <div class="form-group">
         <div class="col-4">
-            <label>Data da Venda</label>
-            <input type="date" asp-for="Data" value="@Model.Data.ToString("yyyy-MM-dd")" class="form-control" />
+            <label>Código</label>
+            <input id="inputCodVenda" asp-for="Codigo" class="form-control" readonly />
+        </div>
+        <div class="col-4">
+            <label>Data de Venda</label>
+            <input type="date" asp-for="Data" id="inputData" class="form-control" />
             <span asp-validation-for="Data" style="color:red;font-weight:bold"></span>
         </div>
-
         <div class="col-4">
             <label>Cliente</label>
-            <select asp-for="CodigoCliente" asp-items="@Model.ListaClientes" class="form-control " input-lg></select>
+            <select id="cboCliente" asp-for="CodigoCliente" asp-items="@Model.ListaClientes" class="form-control " input-lg></select>
             <span asp-validation-for="CodigoCliente" style="color:red;font-weight:bold"></span>
         </div>
         <div class="col-4">
@@ -41,11 +44,14 @@
         </div>
         <br />
         <div class="col-2">
-            <button type="button" class="btn btn-info" onclick="AdicionaProduto()">Adicionar</button>
+            <button type="button" class="btn btn-info" onclick="AdicionaProduto()" id="btnAdicionaVenda">Adicionar</button>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-12">
+            <span asp-validation-for="JsonProdutos" style="color:red;font-weight:bold"></span>
+            <hr />
+            <label style="font-weight:bold">Lista de Produtos da venda</label>
             <table class="table table-bordered">
                 <thead>
                     <tr style="background-color:#f6f6f6">
@@ -53,14 +59,12 @@
                         <th>Preço Unitário</th>
                         <th>Qtd.</th>
                         <th>Valor Total</th>
-                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="gridProdutos">
                     @{
                         if (Model.Produtos != null)
                         {
-
                             foreach (var item in Model.Produtos)
                             {
                                 <tr>
@@ -68,82 +72,146 @@
                                     <td>@item.Produto.Valor</td>
                                     <td>@item.Produto.Quantidade</td>
                                     <td>@item.ValorTotal</td>
-                                    <td><button type="button" class="btn btn-danger" onclick="ExcluirLinha()">Excluir</button></td>
                                 </tr>
                             }
                         }
-
                     }
-
                 </tbody>
             </table>
         </div>
     </div>
     <div class="col-md-3">
-        <label style="font-weight:bold">Total</label>
-        <input id="txtTotal" type="number" asp-for="Total" class="form-control" readonly />
+        <label style="font-weight:bold;font-size:larger">Total da Venda</label>
+        <input asp-for="Total" id="txtTotal" type="number" class="form-control" readonly />
         <span asp-validation-for="Total" class="text-danger"></span>
+        <button type="submit" class="btn btn-success" style="margin-top:20px" id="btnFinalizaVenda">Finalizar</button>
     </div>
     <hr />
     <div class="col">
-        <button type="button" class="btn btn-info" onclick="Novo()">Novo</button>
-        <button type="submit" class="btn btn-success">Gravar</button>
-        <button type="button" class="btn btn-warning" onclick="Listagem()">Listagem</button>
-        <button type="button" class="btn btn-danger" onclick="Excluir(@Model.Codigo)" @disabled>Excluir</button>
+        <button type="button" class="btn btn-info" onclick="Novo()">Nova Venda</button>
+        <button type="button" class="btn btn-warning" onclick="Listagem()">Lista de Vendas</button>
+        <button type="button" class="btn btn-danger" onclick="Excluir(@Model.Codigo)" @disabled>Excluir venda</button>
     </div>
     <textarea asp-for="JsonProdutos" id="txtJsonProdutos" class="col" style="display:none"></textarea>
 </form>
 
 <script>
-    const produto = document.getElementById('cboProduto');
-    const txtJsonProdutos = document.getElementById('txtJsonProdutos');
-    const inputValorProduto = document.getElementById('txtPrecoUnitario');
-    const inputQuantidade = document.getElementById('txtQuantidade');
-    const inputSubTotal = document.getElementById('txtSubTotal');
-    const inputTotal = document.getElementById('txtTotal');
-    const gridProdutos = document.getElementById('gridProdutos');
+    let produto = document.getElementById('cboProduto');
+    let cliente = document.getElementById('cboCliente');
+    let txtJsonProdutos = document.getElementById('txtJsonProdutos');
+    let inputPrecoUnitario = document.getElementById('txtPrecoUnitario');
+    let inputQuantidade = document.getElementById('txtQuantidade');
+    let inputSubTotal = document.getElementById('txtSubTotal');
+    let inputTotal = document.getElementById('txtTotal');
+    let inputCodVenda = document.getElementById('inputCodVenda');
+    let gridProdutos = document.getElementById('gridProdutos');
+    let inputData = document.getElementById('inputData');
+    const quantidadeAtual = 0;
+
+    window.addEventListener('load', () => {
+        verificaListaJsonProdutos();
+    });
 
     const formatter = Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL'
     });
 
-
     const Items = new Object();
     Items.Produto = new Array();
+
+    function verificaListaJsonProdutos() {
+        if (txtJsonProdutos.value != '') {
+            $('#cboProduto').prop('disabled',true);
+            $('#cboCliente').prop('disabled',true);
+            $('#txtPrecoUnitario').prop('disabled',true);
+            $('#txtQuantidade').prop('disabled',true);
+            $('#txtSubTotal').prop('disabled',true);
+            $('#txtTotal').prop('disabled',true);
+            $('#inputCodVenda').prop('disabled',true);
+            $('#inputData').prop('disabled',true);
+            $('#btnFinalizaVenda').prop('disabled',true);
+            $('#btnAdicionaVenda').prop('disabled',true);
+        }
+    }
 
     function AdicionaProduto() {
         if (inputQuantidade.value <= 0) {
             alert('Valor da quantidade não pode ser 0');
             return;
         }
+        if (produto.value == 0) {
+            alert('Selecione um produto');
+            return;
+        }
+        else {
+            criaListaVendaProdutos();
+            RenderListaVendaProdutos();
+            LimpaCampos();
+        }
+    }
 
-        Items.Produto.push({
-            "CodigoProduto": produto.value,
-            "Quantidade": inputQuantidade.value,
-            "ValorTotal": inputSubTotal.value,
-            "ValorUnitario": inputSubTotal.value
-        });
-
-        var linhaGrid = `<tr id=${produto.value}>
-                              <td>${produto.options[produto.selectedIndex].text}</td>
-                              <td>${formatNumber(inputValorProduto.value)}</td>
-                              <td>${inputQuantidade.value}</td>
-                              <td>${formatNumber(inputSubTotal.value)}</td>
-                              <td><button type="button" class="btn btn-danger" onclick="ExcluirLinha()">Excluir</button></td>
+    function RenderListaVendaProdutos() {
+        gridProdutos.innerHTML = '';
+        let linhaGrid = '';
+        Items.Produto.forEach(item => {
+            linhaGrid += `<tr id=${item.CodigoProduto}>
+                              <td>${item.NomeProduto}</td>
+                              <td>${item.ValorUnitario}</td>
+                              <td>${item.Quantidade}</td>
+                              <td>${item.ValorTotal}</td>
+                              <td><button type="button" class="btn btn-danger" onclick="ExcluirVendaProduto(${item.CodigoProduto})">Excluir</button></td>
                         </tr>`;
-
-        var valorTotal = Number(inputSubTotal.value) + Number(inputTotal.value);
-
-
-        inputTotal.value = valorTotal;
-        inputQuantidade.value = 0;
-        txtJsonProdutos.value = JSON.stringify(Items.Produto);
+        });
         gridProdutos.innerHTML += linhaGrid;
     }
 
-    function ExcluirLinha(codigoProduto) {
-        var index = Items.Produto.findIndex(x => x.CodigoProduto == codigoProduto)
+    function criaListaVendaProdutos() {
+        SomaTotalVenda();
+        const indexProduto = Items.Produto.findIndex(x => x.CodigoProduto == produto.value);
+
+        if (indexProduto >= 0) {
+            Items.Produto[indexProduto].ValorTotal = Number(Items.Produto[indexProduto].ValorTotal) + Number(inputSubTotal.value);
+            Items.Produto[indexProduto].Quantidade = Number(Items.Produto[indexProduto].Quantidade) + Number(inputQuantidade.value);
+        }
+        else {
+            Items.Produto.push({
+                "CodigoProduto": produto.value,
+                "NomeProduto": produto.options[produto.selectedIndex].text,
+                "Quantidade": inputQuantidade.value,
+                "ValorTotal": inputSubTotal.value,
+                "ValorUnitario": inputPrecoUnitario.value
+            });
+        }
+        txtJsonProdutos.value = JSON.stringify(Items.Produto);
+    }
+
+    function SomaTotalVenda() {
+        const valorTotal = Number(inputSubTotal.value) + Number(inputTotal.value);
+        inputTotal.value = valorTotal;
+    }
+
+    function LimpaCampos() {
+        produto.value = 0;
+        inputPrecoUnitario.value = 0;
+        inputQuantidade.value = 0;
+        inputSubTotal.value = 0;
+    }
+
+    function ExcluirVendaProduto(codigoProduto) {
+        const index = Items.Produto.findIndex(x => x.CodigoProduto == codigoProduto);
+        const novoValorTotal = Number(inputTotal.value) - Number(Items.Produto[index].ValorTotal);
+
+        inputTotal.value = novoValorTotal;
+        Items.Produto = Items.Produto.filter((_, i) => i !== index);
+
+        if (Items.Produto.length == 0) {
+            txtJsonProdutos.value = null;
+        }
+        else {
+            txtJsonProdutos.value = JSON.stringify(Items.Produto);
+        }
+        RenderListaVendaProdutos();
     };
 
     function formatNumber(value) {
@@ -151,13 +219,18 @@
     }
 
     function BuscarPrecoProduto() {
-        var url = `/BuscaPrecoProduto/${produto.value}`;
-        var xhr = new XMLHttpRequest();
+        if (produto.value == 0) {
+            inputPrecoUnitario.value = '';
+            return;
+        }
+
+        const url = `/BuscaPrecoProduto/${produto.value}`;
+        const xhr = new XMLHttpRequest();
 
         //Quando estado estiver Ok
         xhr.onreadystatechange = function () {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-                inputValorProduto.value = xhr.responseText;
+                inputPrecoUnitario.value = xhr.responseText;
             }
         };
         xhr.open('GET', url, false);
@@ -165,7 +238,7 @@
     }
 
     function CalculaSubTotal() {
-        var subTotal = inputQuantidade.value * inputValorProduto.value;
+        const subTotal = inputQuantidade.value * inputPrecoUnitario.value;
         inputSubTotal.value = subTotal;
     }
 
@@ -184,5 +257,4 @@
     function Request(request) {
         return window.location = window.origin + "\\Venda\\" + request;
     }
-
 </script>

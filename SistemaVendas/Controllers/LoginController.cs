@@ -33,7 +33,6 @@ namespace SistemaVendas.Controllers
         [HttpPost]
         public IActionResult Index(LoginViewModel loginViewModel)
         {
-
             if (!ModelState.IsValid)
             {
                 return View(loginViewModel);
@@ -68,11 +67,7 @@ namespace SistemaVendas.Controllers
                 {
                     throw new Exception(ex.Message);
                 }
-
             }
-
-
         }
-
     }
 }

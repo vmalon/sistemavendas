@@ -5,15 +5,7 @@ using System.Text;
 
 namespace Dominio.Interfaces
 {
-    public interface IServicoCategoria
+    public interface IServicoCategoria : IServicoGenerico<Categoria>
     {
-        IEnumerable<Categoria> ListarCategorias();
-
-        void Cadastrar(Categoria categoria);
-
-        Categoria BuscarCategoria(int id);
-
-        void ExcluirCategoria(int id);
-
     }
 }

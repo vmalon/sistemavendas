@@ -14,7 +14,7 @@ namespace Dominio.Servicos
             RepositorioCategoria = repositorioCategoria;
         }
 
-        public IEnumerable<Categoria> ListarCategorias()
+        public IEnumerable<Categoria>ListarRegistros()
         {
             return RepositorioCategoria.Read();
         }
@@ -24,12 +24,12 @@ namespace Dominio.Servicos
             RepositorioCategoria.Create(categoria);
         }
 
-        public Categoria BuscarCategoria(int id)
+        public Categoria BuscarRegistro(int id)
         {
             return RepositorioCategoria.Read(id);
         }
 
-        public void ExcluirCategoria(int id)
+        public void ExcluirRegistro(int id)
         {
             RepositorioCategoria.Delete(id);
         }

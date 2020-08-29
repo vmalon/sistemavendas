@@ -1,4 +1,4 @@
-﻿@model List<SistemaVendas.Dominio.Entidades.Produto>;
+﻿@model List<SistemaVendas.Models.ProdutoViewModel>;
 
 @{
     ViewData["Title"] = "Clientes";
@@ -25,7 +25,7 @@
                 <td style="cursor:pointer">@item.Descricao</td>
                 <td style="cursor:pointer">@item.Quantidade</td>
                 <td style="cursor:pointer">@item.Valor</td>
-                <td style="cursor:pointer">@item.Categoria.Descricao</td>
+                <td style="cursor:pointer">@item.DescricaoCategoria</td>
             </tr>
         }
     </tbody>

@@ -33,8 +33,6 @@ namespace Repositorio.Contexto
                 .HasOne(x => x.Produto) //Uma venda com 
                 .WithMany(p => p.Vendas) //varios produtos
                 .HasForeignKey(x => x.CodigoProduto);
-
-
         }
     }
 }

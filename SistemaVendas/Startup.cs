@@ -1,4 +1,5 @@
 ﻿using Aplicacao.Servico;
+using Aplicacao.Servico.Interfaces;
 using Dominio.Interfaces;
 using Dominio.Repositorio;
 using Dominio.Servicos;
@@ -33,10 +34,8 @@ namespace SistemaVendas
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //Especificar o provider e a string de conexão
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BancoEstoque")));
-
 
             services.AddDbContext<Repositorio.Contexto.ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BancoEstoque")));
@@ -45,12 +44,25 @@ namespace SistemaVendas
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
 
-            //Serviços com o dominio e aplicação
+            //Serviços com o Aplicacao e Dominio
             services.AddScoped<IServicoAplicacaoCategoria, ServicoAplicacaoCategoria>();
-            services.AddScoped<IServicoCategoria, ServicoCategoria>();
+            services.AddScoped<IServicoAplicacaoCliente, ServicoAplicacaoCliente>();
+            services.AddScoped<IServicoAplicacaoProduto, ServicoAplicacaoProduto>();
+            services.AddScoped<IServicoAplicacaoVenda, ServicoAplicacaoVenda>();
+            services.AddScoped<IServicoAplicacaoVendaProdutos, ServicoAplicacaoVendaProdutos>();
 
-            //Dominio com o repositorio
+            services.AddScoped<IServicoCliente, ServicoCliente>();
+            services.AddScoped<IServicoCategoria, ServicoCategoria>();
+            services.AddScoped<IServicoProduto, ServicoProduto>();
+            services.AddScoped<IServicoVenda, ServicoVenda>();
+            services.AddScoped<IServicoVendaProdutos, ServicoVendaProdutos>();
+
+            //Dominio com o Repositorio
             services.AddScoped<IRepositorioCategoria, RepositorioCategoria>();
+            services.AddScoped<IRepositorioCliente, RepositorioCliente>();
+            services.AddScoped<IRepositorioProduto, RepositorioProduto>();
+            services.AddScoped<IRepositorioVenda, RepositorioVenda>();
+            services.AddScoped<IRepositorioVendaProdutos, RepositorioVendaProdutos>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
