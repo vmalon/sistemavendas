@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositorio.Entidades;
+using SistemaVendas.Controllers;
 using SistemaVendas.DAL;
 
 namespace SistemaVendas
@@ -85,14 +86,12 @@ namespace SistemaVendas
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
-
-
             app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Login}/{action=Index}/{id?}");
-            });
+                                    {
+                                        routes.MapRoute(
+                                            name: "default",
+                                            template: "{controller=Login}/{action=Index}/{id?}");
+                                    });
         }
     }
 }

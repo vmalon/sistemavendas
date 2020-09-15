@@ -56,4 +56,34 @@
             <span>Configurações</span>
         </div>
     </div>
+    <div>
+        <div class="file-upload-wrapper">
+            <input type="file" id="fileUpload" class="file-upload" />
+        </div>
+        <button class="btn btn-primary" id="btnEnviaUpload" onclick="EnviaArquivoUpload()">Enviar</button>
+    </div>
 </div>
+
+<script>
+    function EnviaArquivoUpload() {
+        var arquivo = document.getElementById("fileUpload");
+        $.ajax({
+            url: '@Url.Content("/Home/UploadArquivo")',
+            type: 'post',
+            data: {
+                arquivo: arquivo.files[0].name,
+            },
+            beforeSend: function () {
+            }
+        })
+            .done(function (msg) {
+
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                alert(msg);
+            });
+
+    }
+
+
+</script>

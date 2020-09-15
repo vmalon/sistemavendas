@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using Aplicacao.Servico;
 using Microsoft.AspNetCore.Mvc;
 using SistemaVendas.DAL;
 using SistemaVendas.Models;
@@ -15,7 +18,6 @@ namespace SistemaVendas.Controllers
             Repositorio = repositorio;
         }
 
-
         public IActionResult Index()
         {
             return View();
@@ -31,5 +33,23 @@ namespace SistemaVendas.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpPost]
+        public void UploadArquivo(string arquivo)
+        {
+            try
+            {
+                var ServicoUploadApi = new ServicoUploadApi();
+                var file = new FileInfo(arquivo);
+                var fileList = new List<FileInfo>();
+                fileList.Add(file);
+                ServicoUploadApi.UploadArquivos(fileList);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }
